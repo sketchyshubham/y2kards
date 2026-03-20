@@ -42,7 +42,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .preview::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,194,209,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,194,209,0.035) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;}
 .preview-tag{font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border-hi);padding:3px 10px;border-radius:2px;position:relative;z-index:1;}
 .card-wrap{position:relative;z-index:1;}
-.card-outer{width:360px;height:200px;border-radius:10px;overflow:hidden;position:relative;box-shadow:0 0 0 1px rgba(255,255,255,0.07),0 20px 60px rgba(0,0,0,0.9);}
+.card-border{position:relative;width:364px;height:204px;border-radius:12px;padding:2px;background:conic-gradient(from var(--specular-angle,0deg),rgba(255,255,255,0.08) 0%,rgba(0,194,209,0.7) 8%,rgba(249,233,0,0.9) 16%,rgba(237,51,185,0.6) 24%,rgba(255,255,255,0.9) 30%,rgba(255,255,255,0.08) 38%,rgba(0,194,209,0.15) 55%,rgba(255,255,255,0.08) 70%,rgba(249,233,0,0.3) 85%,rgba(255,255,255,0.08) 100%);animation:specular 6s linear infinite;box-shadow:0 20px 60px rgba(0,0,0,0.9),0 0 40px rgba(0,194,209,0.12);}@property --specular-angle{syntax:"<angle>";initial-value:0deg;inherits:false;}@keyframes specular{from{--specular-angle:0deg;}to{--specular-angle:360deg;}}@property --sa{syntax:"<angle>";initial-value:0deg;inherits:false;}@keyframes specular{from{--sa:0deg;}to{--sa:360deg;}}.card-border{position:relative;border-radius:12px;padding:2px;background:conic-gradient(from var(--sa,0deg),rgba(255,255,255,0.06) 0%,rgba(0,194,209,0.8) 8%,rgba(249,233,0,1.0) 18%,rgba(237,51,185,0.7) 26%,rgba(255,255,255,1.0) 32%,rgba(255,255,255,0.06) 40%,rgba(0,194,209,0.12) 58%,rgba(255,255,255,0.06) 72%,rgba(249,233,0,0.25) 88%,rgba(255,255,255,0.06) 100%);animation:specular 6s linear infinite;box-shadow:0 20px 60px rgba(0,0,0,0.9),0 0 40px rgba(0,194,209,0.1);flex-shrink:0;}.card-outer{width:360px;height:200px;border-radius:10px;overflow:hidden;position:relative;box-shadow:none;}
 .card-shine{position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:10px;box-shadow:inset 0 0 0 2px rgba(255,255,255,0.16),inset 3px 3px 14px rgba(255,255,255,0.1),inset -3px -3px 14px rgba(0,0,0,0.3);}
 .card-fixed{position:absolute;top:11px;z-index:6;font-family:'Space Grotesk',sans-serif;font-size:6.5px;letter-spacing:1px;pointer-events:none;opacity:0.85;line-height:1;}
 .card-fixed.tl{left:13px;} .card-fixed.tr{right:13px;letter-spacing:2px;}
@@ -103,7 +103,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .sl-val{font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--accent2);width:30px;text-align:right;flex-shrink:0;}
 
 /* draw zone */
-.draw-zone{background:var(--surface2);border:1px solid var(--border-hi);border-radius:4px;height:120px;position:relative;overflow:hidden;cursor:crosshair;touch-action:none;}
+.draw-zone{background:var(--surface2);border:1px solid var(--border-hi);border-radius:4px;height:180px;position:relative;overflow:hidden;cursor:crosshair;touch-action:none;}
 .draw-zone canvas{position:absolute;inset:0;width:100%;height:100%;}
 .draw-hint-lbl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--text-muted);letter-spacing:1px;pointer-events:none;transition:opacity 0.2s;}
 .draw-btns{display:flex;gap:6px;margin-top:7px;}
@@ -126,12 +126,12 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     overflow:hidden;
   }
 
-  /* Preview: exactly 25vh — sticky at top, never scrolls away */
+  /* Preview: 31vh (25vh + 25%) — sticky at top, never scrolls away */
   .preview{
     flex:none;
-    height:25vh;
-    min-height:160px;
-    max-height:220px;
+    height:31vh;
+    min-height:200px;
+    max-height:275px;
     padding:8px 12px 6px;
     overflow:hidden;
     gap:6px;
@@ -139,7 +139,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     background:var(--bg);
   }
 
-  /* Card scales to fit the 25vh preview box */
+  /* Card scales proportionally via JS transform:scale — preserves all internal layout */
   .card-wrap{
     width:100%;
     display:flex;
@@ -147,13 +147,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     align-items:center;
     flex:1;
     min-height:0;
+    overflow:visible;
+  }
+  .card-border{
+    transform-origin:center center;
+    /* JS sets transform:scale() dynamically */
   }
   .card-outer{
-    /* Scale card to fit available width with correct aspect ratio */
-    width:min(calc((25vh - 60px) * 1.8), calc(100vw - 24px));
-    height:auto;
-    aspect-ratio:1.8;
-    border-radius:8px;
+    width:360px !important;
+    height:200px !important;
+    border-radius:10px;
   }
 
   /* Hide preview tag on mobile to save vertical space */
@@ -183,7 +186,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   .card-fixed{font-size:5.5px;}
 
   /* Larger draw zone for finger comfort */
-  .draw-zone{height:140px;}
+  .draw-zone{height:200px;}
 
   /* Topbar: tighter on mobile, safe area aware */
   .topbar{padding:0 max(12px, env(safe-area-inset-left));}
@@ -291,7 +294,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   .fgrid label{font-size:11px;}
 
   /* Draw zone — taller for comfortable finger drawing */
-  .draw-zone{height:160px;}
+  .draw-zone{height:200px;}
   .draw-btns{gap:8px;margin-top:10px;}
   .draw-btns .btn{min-height:44px;}
 
@@ -317,6 +320,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   <div class="preview">
     <div class="preview-tag">live preview</div>
     <div class="card-wrap">
+      <div class="card-border" id="cardBorder">
       <div class="card-outer" id="cardOuter">
         <canvas id="noiseC" width="360" height="200" style="position:absolute;inset:0;z-index:2;pointer-events:none;width:100%;height:100%;"></canvas>
         <div class="card-shine"></div>
@@ -339,6 +343,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
     <div class="status-row">
@@ -567,8 +572,15 @@ function renderSig() {
     if(pt.y<minY)minY=pt.y;if(pt.y>maxY)maxY=pt.y;
   }));
   const sw=maxX-minX||1,sh=maxY-minY||1;
-  const scale=Math.min((H*0.33)/sh,(W*0.8)/sw);
-  const ox=W/2-(minX+sw/2)*scale, oy=H/2-(minY+sh/2)*scale;
+  // Safe zone: right half of card, vertically centred, QR-safe
+  // QR sits at bottom-right ~56px wide x 55px tall — keep 68px right margin
+  // Zone: x from W*0.52 to W-70, y from 18 to H-14 (full height, above text zone)
+  const zoneX1=W*0.52, zoneX2=W-70;
+  const zoneY1=18,     zoneY2=H-14;
+  const zoneW=zoneX2-zoneX1, zoneH=zoneY2-zoneY1;
+  const scale=Math.min((zoneH*0.72)/sh,(zoneW*0.88)/sw);
+  const cx=zoneX1+zoneW/2, cy=zoneY1+zoneH/2;
+  const ox=cx-(minX+sw/2)*scale, oy=cy-(minY+sh/2)*scale;
   sc.strokeStyle=txtColor==='white'?'rgba(255,255,255,0.88)':'rgba(0,0,0,0.82)';
   sc.lineWidth=1.8; sc.lineCap='round'; sc.lineJoin='round';
   sigPaths.forEach(path=>{
@@ -685,7 +697,7 @@ async function downloadPNG() {
     cc.globalAlpha = 1;
     cc.drawImage(document.getElementById('noiseC'), 0, 0, W, H);
 
-    // 4d. Signature
+    // 4d. Signature — right half, vertically centred, QR-safe
     if (sigPaths.length) {
       let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
       sigPaths.forEach(p => p.forEach(pt => {
@@ -693,9 +705,13 @@ async function downloadPNG() {
         if(pt.y<minY)minY=pt.y; if(pt.y>maxY)maxY=pt.y;
       }));
       const sw = maxX - minX || 1, sh = maxY - minY || 1;
-      const sigScale = Math.min((H * 0.33) / sh, (W * 0.8) / sw);
-      const ox = W/2 - (minX + sw/2) * sigScale;
-      const oy = H/2 - (minY + sh/2) * sigScale;
+      const zoneX1=W*0.52, zoneX2=W-70;
+      const zoneY1=18,     zoneY2=H-14;
+      const zoneW=zoneX2-zoneX1, zoneH=zoneY2-zoneY1;
+      const sigScale = Math.min((zoneH*0.72)/sh,(zoneW*0.88)/sw);
+      const cx=zoneX1+zoneW/2, cy=zoneY1+zoneH/2;
+      const ox = cx - (minX + sw/2) * sigScale;
+      const oy = cy - (minY + sh/2) * sigScale;
       cc.strokeStyle = txtColor === 'white' ? 'rgba(255,255,255,0.88)' : 'rgba(0,0,0,0.82)';
       cc.lineWidth = 1.6; cc.lineCap = 'round'; cc.lineJoin = 'round';
       sigPaths.forEach(path => {
@@ -910,6 +926,28 @@ function animate(){
 }
 
 // INIT
+function scaleMobileCard(){
+  // Only apply on mobile breakpoint
+  if(window.innerWidth > 700) {
+    const border = document.getElementById('cardBorder');
+    if(border) border.style.transform = '';
+    return;
+  }
+  const border = document.getElementById('cardBorder');
+  if(!border) return;
+  // Available width = viewport minus 24px padding
+  const availW = window.innerWidth - 24;
+  // card-border natural width = 364px (360 card + 2px border each side)
+  const naturalW = 364;
+  const scale = Math.min(1, availW / naturalW);
+  border.style.transform = 'scale(' + scale + ')';
+  // Shrink the card-wrap height to match scaled card height
+  // Natural border height = 204px
+  const scaledH = Math.round(204 * scale);
+  const wrap = border.parentElement;
+  if(wrap) wrap.style.height = scaledH + 'px';
+}
+
 function init(){
   buildPalette();
   noiseOnce();
@@ -917,8 +955,11 @@ function init(){
   applyTxt();
   initDraw();
   updateQR();
+  scaleMobileCard();
   animate();
 }
+
+window.addEventListener('resize', scaleMobileCard);
 
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded',function(){document.fonts.ready.then(init);});
