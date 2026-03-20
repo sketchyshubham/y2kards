@@ -97,9 +97,9 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .sliders{display:flex;flex-direction:column;gap:8px;}
 .sl{display:flex;align-items:center;gap:8px;}
 .sl label{font-size:10px;font-weight:500;color:var(--text-muted);width:60px;flex-shrink:0;}
-.sl input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:2px;background:var(--border-hi);border-radius:1px;outline:none;cursor:pointer;}
-.sl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--accent2);border:2px solid #000;cursor:pointer;}
-.sl input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--accent2);border:2px solid #000;cursor:pointer;}
+.sl input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:13px;background:transparent;outline:none;cursor:pointer;padding:0;margin:0;}
+.sl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--accent2);border:2px solid #000;cursor:pointer;margin-top:-5.5px;}
+.sl input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:var(--accent2);border:2px solid #000;cursor:pointer;box-sizing:border-box;}input[type=range]::-webkit-slider-runnable-track{height:2px;background:var(--border-hi);border-radius:1px;}input[type=range]::-moz-range-track{height:2px;background:var(--border-hi);border-radius:1px;}input[type=range]::-webkit-slider-thumb{margin-top:-5.5px;}
 .sl-val{font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--accent2);width:30px;text-align:right;flex-shrink:0;}
 
 /* draw zone */
@@ -192,6 +192,112 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
   /* Scanline off on mobile — performance */
   body::before{display:none;}
+
+  /* ── TOUCH-FRIENDLY CONTROLS ─────────────────────── */
+
+  /* Section padding — more breathing room between groups */
+  .csec{padding:14px 16px;}
+
+  /* Section headers — more space above each group */
+  .sec-head{margin-bottom:12px;font-size:10px;}
+
+  /* Buttons — min 44px touch target (Apple HIG standard) */
+  .btn{
+    min-height:44px;
+    padding:10px 16px;
+    font-size:11px;
+    letter-spacing:1px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .btn.primary{min-height:44px;}
+
+  /* Top bar buttons — compact but still 44px tall */
+  .topbar .btn{
+    min-height:36px;
+    padding:6px 10px;
+    font-size:9px;
+  }
+
+  /* Pills (shape + wave selectors) — bigger tap targets */
+  .pill{
+    min-height:40px;
+    min-width:40px;
+    padding:8px 12px;
+    font-size:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .pills{gap:6px;row-gap:8px;}
+
+  /* Text/White/Black toggles */
+  .tog{
+    min-height:40px;
+    padding:8px 20px;
+    font-size:11px;
+  }
+
+  /* Colour swatches — bigger dots, easier to tap */
+  .cdot{width:36px;height:36px;}
+  .cgrid{gap:8px 6px;}
+  .clabel{font-size:8px;width:38px;}
+
+  /* Sliders — taller track + bigger thumb for fingers */
+  .sl{
+    gap:10px;
+    padding:4px 0;
+  }
+  .sl label{
+    font-size:11px;
+    width:68px;
+    flex-shrink:0;
+  }
+  .sl-val{
+    font-size:11px;
+    width:32px;
+  }
+  /* Tall invisible touch zone around the slider track */
+  .sl input[type=range]{
+    height:22px;
+    background:transparent;
+    cursor:pointer;
+  }
+  .sl input[type=range]::-webkit-slider-thumb{
+    width:22px;
+    height:22px;
+    border-width:3px;
+    margin-top:-10px;
+  }
+  .sl input[type=range]::-moz-range-thumb{
+    width:22px;
+    height:22px;
+    border-width:3px;
+    box-sizing:border-box;
+  }
+  /* Visible track line stays 2px but hit area is 28px */
+  .sl input[type=range]::-webkit-slider-runnable-track{height:2px;}
+  .sl input[type=range]::-moz-range-track{height:2px;}
+  .sliders{gap:4px;}
+
+  /* Text input fields — taller, bigger font */
+  .fgrid{gap:8px 10px;}
+  .fgrid input{
+    min-height:44px;
+    font-size:14px;
+    padding:8px 10px;
+  }
+  .fgrid label{font-size:11px;}
+
+  /* Draw zone — taller for comfortable finger drawing */
+  .draw-zone{height:160px;}
+  .draw-btns{gap:8px;margin-top:10px;}
+  .draw-btns .btn{min-height:44px;}
+
+  /* Action strip */
+  .action-strip{padding:14px 16px;gap:10px;}
+  .action-strip .btn{min-height:48px;font-size:11px;}
 }
 </style>
 </head>
